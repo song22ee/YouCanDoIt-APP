@@ -41,7 +41,7 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
     String nickname;
     TextView text;
 
-//    //현재 날짜 가져오기.
+    //    //현재 날짜 가져오기.
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -56,7 +56,7 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
 
     String pedometer_date = getTime();
 
-//    //만보기
+    //    //만보기
     SensorManager sm;
     Sensor sensor_accelerometer;
     long myTime1, myTime2;
@@ -72,9 +72,9 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
     long currentTime;
 
     public int walkingCount=0; //만보기 변수
-//
+    //
     TextView tv_step;
-//
+    //
     ValueHandler handler = new ValueHandler();
 
     protected void onResume() {
@@ -202,8 +202,6 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
 
         text.setText(nickname+" 님");
 
-        //만보기 레코드 없으면 insert
-        AddRecord();
 
         //만보기능 스레드 시작.
         PedoUpThread pedoUpThread = new PedoUpThread();
@@ -233,7 +231,7 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
 
         //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
         resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()+AlarmManager.INTERVAL_DAY
-               , AlarmManager.INTERVAL_DAY, resetSender);
+                , AlarmManager.INTERVAL_DAY, resetSender);
 
         SimpleDateFormat format = new SimpleDateFormat("MM/dd kk:mm:ss");
         String setResetTime = format.format(new Date(resetCal.getTimeInMillis()+AlarmManager.INTERVAL_DAY));
@@ -246,17 +244,6 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
         walkingCount=0;
     }
 
-    //pedometer_ranking에 새 레코드 추가
-    public void AddRecord(){
-        try {
-            id = i.getStringExtra("id");
-            PedoRankInsertActivity task = new PedoRankInsertActivity();
-            task.execute(pedometer_date,"1",id);// 일단 그룹 넘버가 1이라고 가정.
-            Log.i("Pedometer.java", "AddRecord() sucess");
-        } catch (Exception e) {
-            Log.i("Pedometer.java", "AddRecord() fail : "+e.getMessage());
-        }
-    }
 
 
 }
