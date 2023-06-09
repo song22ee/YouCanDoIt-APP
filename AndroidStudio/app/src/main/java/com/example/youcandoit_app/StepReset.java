@@ -12,7 +12,7 @@ public class StepReset extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ((Pedometer)Pedometer.PedoContext).countReset(); //만보기 리셋하는 함수 실행시키기.
+//        ((Pedometer)Pedometer.PedoContext).countReset(); //만보기 리셋하는 함수 실행시키기.
 
         Log.d("resetAlarm", "StepRest.java 실행. ");
 
