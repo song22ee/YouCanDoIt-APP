@@ -21,7 +21,7 @@ public class DBsendActivity extends AsyncTask<String, Void, String> {
         try {
             String str;
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
+            URL url = new URL("http://172.20.10.2:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -30,7 +30,7 @@ public class DBsendActivity extends AsyncTask<String, Void, String> {
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
 
             //전송할 데이터. GET방식으로 작성
-            sendMsg = "pedometer_date=" + strings[0] + "&group_number=" + strings[1]+"&mem_id=" + strings[2] + "&pedometer_result=" + strings[3];
+            sendMsg = "pedometer_date=" + strings[0] +"&mem_id=" + strings[1] + "&pedometer_result=" + strings[2];
 
             osw.write(sendMsg);
             osw.flush();
