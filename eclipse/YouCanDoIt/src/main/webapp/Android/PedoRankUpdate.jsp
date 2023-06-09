@@ -25,8 +25,6 @@ try{
 
 	Date date = formatter.parse(dateStr);
 
-	int group = Integer.parseInt(request.getParameter("group_number"));
-
 	String id = request.getParameter("mem_id");
 
 	int pedometer = Integer.parseInt(request.getParameter("pedometer_result"));
@@ -34,7 +32,6 @@ try{
 
 	//dto 세팅.
 	pedoRankDto.setPedometer_date(date);
-	pedoRankDto.setGroup_number(group);
 	pedoRankDto.setMem_id(id);
 	pedoRankDto.setPedometer_result(pedometer);
 

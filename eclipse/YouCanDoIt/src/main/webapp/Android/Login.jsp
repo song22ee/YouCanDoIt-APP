@@ -9,7 +9,6 @@ Boolean canLogin = false;
 
 MemberDao memberDao = new MemberDao();
 
-
 //한글 인코딩 부분
 request.setCharacterEncoding("utf-8"); 
 
