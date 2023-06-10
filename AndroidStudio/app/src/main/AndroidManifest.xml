@@ -37,6 +37,12 @@
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".PedometerDAO"
+            android:exported="true">
+        </activity>
+
+
         <receiver
             android:name=".StepReset">
         </receiver>
