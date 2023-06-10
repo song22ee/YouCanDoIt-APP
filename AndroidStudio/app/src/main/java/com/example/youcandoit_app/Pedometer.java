@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -40,12 +43,14 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
     String id;
     String nickname;
     TextView text;
+    PedometerDTO dto = new PedometerDTO();
+    public boolean isFirst = true; // 오늘 pedometer SQLite DB에 insert를 최초로 했는지.
 
-   //현재 날짜 가져오기.
+    //현재 날짜 가져오기.
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat mFormatHour = new SimpleDateFormat("HH");
+    SimpleDateFormat mFormatHour = new SimpleDateFormat("HH:mm:ss");
 
     private String getDate(){
         mNow = System.currentTimeMillis();
@@ -85,6 +90,7 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
 
     ValueHandler handler = new ValueHandler();
 
+
     protected void onResume() {
         super.onResume();
         if (sensor_accelerometer != null) {
@@ -114,6 +120,35 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
                 lastY = event.values[1];
                 lastZ = event.values[2];
             }
+
+            //만보가 최초로 올라갈때 insert
+            if(walkingCount == 1){
+                if(isFirst){// isFirst = 오늘 최초로 insert를 하는 건지.
+                    try{
+                        Log.i("pedoSend.java", "onSensorChanged() : 만보기가 최초로 올라감. if(walkingCount == 1)문 실행.");
+                        Log.i("pedoSend.java", "onSensorChanged() : walkingCount="+walkingCount);
+                        id = i.getStringExtra("id");
+
+                        Log.i("pedoSend.java", "onSensorChanged() : id="+id);
+                        Log.i("pedoSend.java", "onSensorChanged() : pedometer_date="+pedometer_date);
+                        dto.setId(id);
+                        dto.setDate(pedometer_date); //현재 날짜 세팅
+                        dto.setStep(1); //만보기는 1으로 세팅
+                        Log.i("pedoSend.java", "onSensorChanged() : pedometer dto 세팅완료.");
+                        Log.i("pedoSend.java", "onSensorChanged() : ((PedometerDAO) PedometerDAO.context) : "+((PedometerDAO) PedometerDAO.context));
+
+//                    ((PedometerDAO) PedometerDAO.context).insertOne(dto);
+//                    Log.i("pedoSend.java", "onSensorChanged() :  PedometerDAO.insertOne(dto) 실행.");
+                        isFirst=false; //insert를 했으므로 false로 변경.
+                    }catch (Exception e){
+                        Log.e("pedoSend.java", "onSensorChanged() :  if(walkingCount == 1)오류 발생.");
+                        e.printStackTrace();
+                    }
+                }
+            }else if(!isFirst && walkingCount >= 2){ // 2보다 클때
+                isFirst = true; //내일 pedometer SQLite db에 최초로 insert를 위해 미리 true로 세팅.
+            }
+
         }
 
     }
@@ -126,8 +161,15 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if(msg.what == 0){
+                current_hour = getTime();
+                Log.v("pedoSend.java", "현재시간 : " + current_hour);
+                //자정일때
+                if(current_hour.equals("00:00:00")){
+                    Log.i("pedoSend.java", "자정이므로 만보기를 초기화 합니다. ");
+                    walkingCount=0; //만보기 초기화
+                }
                 tv_step.setText(walkingCount+"");
-                Log.i("Pedometer.java:", "PedoUpThread 실행중");
+                Log.v("Pedometer.java:", "PedoUpThread 실행중");
             }
         }
     }
@@ -148,11 +190,14 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("Pedometer.java:","Pedometer.java에 들어옴.");
-        Log.v("Pedometer.java","현재 시간 : " + current_hour +"시");
+        Log.i("Pedometer.java:","로그인 완료");
+        Log.i("Pedometer.java:","Pedometer.java에 들어옴.");
+        Log.i("Pedometer.java","현재 시간 : " + current_hour +"시");
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //화면 세로로 설정
         setContentView(R.layout.main_page);
+
+
 
         tv_step = findViewById(R.id.tv_step);
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -160,6 +205,8 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
         text = (TextView) findViewById(R.id.text);
 
         PedoContext = this; //onCreate에서 this 할당 -> PedoSend.java에서 사용.
+
+
 
         // 디바이스에 걸음 센서의 존재 여부 체크
         if (sensor_accelerometer == null) {
@@ -178,8 +225,9 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
         pedoUpThread.start();
 
         //1시간마다 만보기 결과 db로 전송하기.
-        pedoSendAlarm();
+//        pedoSendAlarm();
 //        resetAlarm();
+
     }
 
     //1시간마다 만보기 결과 db로 전송하기
@@ -206,14 +254,15 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
         // 설정한 시간 보기
         SimpleDateFormat format = new SimpleDateFormat("MM/dd kk:mm:ss");
         String setPedoSendTime = format.format(new Date(pedoSendCal.getTimeInMillis()));
-        Log.d("pedoSendAlarm", "pedoSendHour : " + setPedoSendTime);
+        Log.i("pedoSendAlarm", "pedoSendHour : " + setPedoSendTime);
 
     }
+
 
     //만보기 결과 db 전송 - pedoSendAlarm()로 인해 1시간 간격으로 PedoSend.java에서 이 함수가 실행 되게 됨.
     public void pedoSend(){
         try {
-            Log.d("Pedometer.java:", "pedoSend() 진입");
+            Log.i("Pedometer.java:", "pedoSend() 진입");
             id = i.getStringExtra("id");
             String pedometer_result = String.valueOf(tv_step.getText());
             DBsendActivity task = new DBsendActivity(); //DBsendActivity.java 객체 생성.
@@ -251,7 +300,7 @@ public class Pedometer extends AppCompatActivity implements SensorEventListener 
 //        SimpleDateFormat format = new SimpleDateFormat("MM/dd kk:mm:ss");
 //        String setResetTime = format.format(new Date(resetCal.getTimeInMillis()+AlarmManager.INTERVAL_DAY));
 //
-//        Log.d("resetAlarm", "ResetHour : " + setResetTime);
+//        Log.i("resetAlarm", "ResetHour : " + setResetTime);
 //
 //    }
 

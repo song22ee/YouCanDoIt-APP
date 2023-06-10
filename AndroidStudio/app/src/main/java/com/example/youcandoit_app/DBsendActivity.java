@@ -21,7 +21,7 @@ public class DBsendActivity extends AsyncTask<String, Void, String> {
         try {
             String str;
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-            URL url = new URL("http://172.20.10.2:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
+            URL url = new URL("http://172.30.1.58:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
