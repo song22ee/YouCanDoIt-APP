@@ -15,8 +15,9 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE if not exists pedometer ("
-                + "date text primary key,"
-                + "id text primary key,"
+                + "dateid text primary key,"
+                + "date text,"
+                + "id text,"
                 + "step int);";
 
         db.execSQL(sql);
