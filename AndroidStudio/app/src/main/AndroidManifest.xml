@@ -37,15 +37,6 @@
             android:exported="true">
         </activity>
 
-        <activity
-            android:name=".PedometerDAO"
-            android:exported="true">
-        </activity>
-
-
-        <receiver
-            android:name=".StepReset">
-        </receiver>
 
         <receiver
             android:name=".PedoSend"
@@ -53,6 +44,14 @@
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.BOOT_COMPLETED"></action>-->
 <!--            </intent-filter>-->
+        </receiver>
+
+        <receiver
+            android:name=".RTCpedoUpdate"
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.BOOT_COMPLETED"></action>-->
+            <!--            </intent-filter>-->
         </receiver>
 
     </application>

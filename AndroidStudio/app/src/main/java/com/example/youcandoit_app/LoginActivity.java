@@ -24,7 +24,7 @@ public class LoginActivity extends AsyncTask<String, Void, String> {
             String str;
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
 //            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/AndroidDB.jsp");
-            URL url = new URL("http://172.30.1.58:8080/YouCanDoIt/Android/Login.jsp");
+            URL url = new URL("http://172.30.1.94:8080/YouCanDoIt/Android/Login.jsp");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -38,7 +38,7 @@ public class LoginActivity extends AsyncTask<String, Void, String> {
             osw.write(sendMsg);
             osw.flush();
             //logcat에 찍어볼 수 있음.
-            Log.v("sendMsg : " , sendMsg);
+            Log.i("sendMsg : " , sendMsg);
 
 
             //jsp와 통신 성공 시 수행
@@ -52,11 +52,11 @@ public class LoginActivity extends AsyncTask<String, Void, String> {
                     buffer.append(str);
                 }
                 receiveMsg = buffer.toString();
-                Log.v("receiveMsg : ",receiveMsg);
+                Log.i("receiveMsg : ",receiveMsg);
 
             } else {
                 //통신 실패
-                Log.v("통신실패!!!!","통신실패!!!");
+                Log.i("통신실패!!!!","통신실패!!!");
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

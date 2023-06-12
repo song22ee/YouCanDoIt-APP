@@ -31,29 +31,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-
                     String nickname;
                     String mem_id = id.getText().toString();
                     String password = pw.getText().toString();
 
                     LoginActivity task = new LoginActivity();
                     nickname = task.execute(mem_id, password).get();
-                    Log.v("result:",nickname);
                     switch (nickname){
                         case "로그인 실패": //로그인 실패
                             Toast.makeText(MainActivity.this, "아이디 또는 비번이 틀립니다.", Toast.LENGTH_SHORT).show();
                             break;
                         default://로그인 성공
-                            Log.v("MainActivity:","switch로 잘 들어왔음");
+                            Log.i("MainActivity.java:","로그인 성공");
+                            Log.i("MainActivity.java:","아이디 : " + mem_id);
+                            Log.i("MainActivity.java:","닉네임 : " + nickname);
                             Intent i = new Intent(getApplicationContext(),Pedometer.class);
                             i.putExtra("nickname",nickname);
                             i.putExtra("id",mem_id);
                             startActivityForResult(i,10);
                             break;
                     }
-                    Log.i("DBtest", "success");
+                    Log.i("MainActivity.java:", "LoginActivity.java와 통신 성공.");
                 } catch (Exception e) {
-                    Log.i("DBtest", e.getMessage());
+                    Log.i("MainActivity.java:", "LoginActivity.java와 통신 실패.");
+                    Log.i("MainActivity.java:", e.getMessage());
                 }
             }
         });
