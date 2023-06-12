@@ -38,22 +38,6 @@
         </activity>
 
 
-        <receiver
-            android:name=".PedoSend"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.BOOT_COMPLETED"></action>-->
-<!--            </intent-filter>-->
-        </receiver>
-
-        <receiver
-            android:name=".RTCpedoUpdate"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.BOOT_COMPLETED"></action>-->
-            <!--            </intent-filter>-->
-        </receiver>
-
     </application>
 
 </manifest>
