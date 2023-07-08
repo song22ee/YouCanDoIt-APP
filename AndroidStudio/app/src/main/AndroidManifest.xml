@@ -10,7 +10,10 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
     <!-- 기기가 재부팅되어도 실행 가능하도록 -->
-<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+    <!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+
+    <!-- 앱이 종료되어도 포그라운드 작업 허용 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:usesCleartextTraffic="true"
@@ -23,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YouCanDoItAPP"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,11 +36,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Pedometer"
             android:exported="true">
         </activity>
 
+        <service android:name=".PedometerService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
 
     </application>
 
