@@ -1,73 +1,96 @@
 package com.example.youcandoit_app;
 
-import android.app.Activity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-public class LoginActivity extends AsyncTask<String, Void, String> {
-    String sendMsg, receiveMsg;
-    String loginresult,nickname;
+public class LoginActivity extends AppCompatActivity {
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    LoginTask task;
+    String mem_id, password, nickname;
+    EditText id ,pw;
+    Button loginBtn;
+
 
     @Override
-    protected String doInBackground(String... strings) {
-        try {
-            String str;
-            //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-//            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/AndroidDB.jsp");
-            URL url = new URL("http://172.30.1.94:8080/YouCanDoIt/Android/Login.jsp");
-            // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestMethod("POST");
-            OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
+        preferences = getSharedPreferences("login", MODE_PRIVATE);
+        mem_id = preferences.getString("id", null);
+        password = preferences.getString("pw", null);
 
-            //전송할 데이터. GET방식으로 작성
-            sendMsg = "id=" + strings[0] + "&pw=" + strings[1];
-
-            osw.write(sendMsg);
-            osw.flush();
-            //logcat에 찍어볼 수 있음.
-            Log.i("sendMsg : " , sendMsg);
-
-
-            //jsp와 통신 성공 시 수행
-            if (conn.getResponseCode() == conn.HTTP_OK) {
-                InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
-                BufferedReader reader = new BufferedReader(tmp);
-                StringBuffer buffer = new StringBuffer();
-
-                // jsp에서 보낸 값을 받는 부분
-                while ((str = reader.readLine()) != null) {
-                    buffer.append(str);
+        if(mem_id != null && password != null) {
+            Log.i("LoginActivity.java:", "자동로그인");
+            try {
+                task = new LoginTask();
+                nickname = task.execute(mem_id, password).get();
+                if(nickname != "로그인 실패") {
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
                 }
-                receiveMsg = buffer.toString();
-                Log.i("receiveMsg : ",receiveMsg);
-
-            } else {
-                //통신 실패
-                Log.i("통신실패!!!!","통신실패!!!");
+            } catch (Exception e) {
+                Log.i("LoginActivity.java:", "LoginActivity.java와 통신 실패.");
+                Log.i("LoginActivity.java:", e.getMessage());
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            Log.i("LoginActivity.java", e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i("LoginActivity.java", e.getMessage());
         }
 
-        //jsp로부터 받은 리턴 값
-        return receiveMsg;
-    }
+        setContentView(R.layout.login_page);
 
+        id = (EditText) findViewById(R.id.id);
+        pw= (EditText) findViewById(R.id.pw);
+        loginBtn = (Button) findViewById(R.id.loginBtn);
+
+
+        editor = preferences.edit();
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    mem_id = id.getText().toString();
+                    password = pw.getText().toString();
+
+                    task = new LoginTask();
+                    nickname = task.execute(mem_id, password).get();
+                    switch (nickname){
+                        case "로그인 실패": //로그인 실패
+                            Toast.makeText(LoginActivity.this, "아이디 또는 비번이 틀립니다.", Toast.LENGTH_SHORT).show();
+                            break;
+                        default://로그인 성공
+                            Log.i("LoginActivity.java:","로그인 성공");
+                            Log.i("LoginActivity.java:","아이디 : " + mem_id);
+                            Log.i("LoginActivity.java:","닉네임 : " + nickname);
+                            editor.putString("id", mem_id);
+                            editor.putString("pw", password);
+                            editor.putString("nickname", nickname);
+                            editor.commit();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                            break;
+                    }
+                    Log.i("LoginActivity.java:", "LoginActivity.java와 통신 성공.");
+                } catch (Exception e) {
+                    Log.i("LoginActivity.java:", "LoginActivity.java와 통신 실패.");
+                    Log.i("LoginActivity.java:", e.getMessage());
+                }
+            }
+        });
+
+
+
+
+
+    }
 }

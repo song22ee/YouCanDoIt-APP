@@ -1,6 +1,5 @@
 package com.example.youcandoit_app;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,16 +11,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DBsendActivity extends AsyncTask<String, Void, String> {
+public class LoginTask extends AsyncTask<String, Void, String> {
     String sendMsg, receiveMsg;
-    String loginresult,nickname;
 
     @Override
-    protected String doInBackground(String ...strings) {
+    protected String doInBackground(String... strings) {
         try {
             String str;
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-            URL url = new URL("http://172.30.1.94:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
+            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/Login.jsp");
+//            URL url = new URL("http://192.168.45.95:8080/YouCanDoIt/Android/Login.jsp");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -30,7 +29,7 @@ public class DBsendActivity extends AsyncTask<String, Void, String> {
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
 
             //전송할 데이터. GET방식으로 작성
-            sendMsg = "pedometer_date=" + strings[0] +"&mem_id=" + strings[1] + "&pedometer_result=" + strings[2];
+            sendMsg = "id=" + strings[0] + "&pw=" + strings[1];
 
             osw.write(sendMsg);
             osw.flush();
@@ -57,8 +56,10 @@ public class DBsendActivity extends AsyncTask<String, Void, String> {
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            Log.i("LoginTask.java", e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i("LoginTask.java", e.getMessage());
         }
 
         //jsp로부터 받은 리턴 값

@@ -14,10 +14,8 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class PedometerService extends Service implements SensorEventListener {
 
@@ -35,10 +33,10 @@ public class PedometerService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         // 걸음 센서 이벤트 발생시
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            Log.v("Pedometer.java", "onSensorChanged()");
+            Log.v("PedometerService.java", "onSensorChanged()");
             // 앱을 처음 사용할 때
             if (preferences.getInt("step", -1) == -1) {
-                Log.v("Pedometer.java:", "초기화됨");
+                Log.v("PedometerService.java:", "초기화됨");
                 editor.putInt("step", 0);
                 editor.putInt("prevStep", (int) event.values[0]);
                 editor.commit();
@@ -51,16 +49,16 @@ public class PedometerService extends Service implements SensorEventListener {
 
             if (event.values[0] < prevWalkingCount) {
                 // 재부팅 했을 경우 이벤트 값이 초기화 되기 때문에 처음부터 다시 쌓아준다.
-                Log.v("Pedometer.java:", "이벤트 값이 적음");
+                Log.v("PedometerService.java:", "이벤트 값이 적음");
                 editor.putInt("prevStep", 0);
                 editor.putInt("step", walkingCount + (int) event.values[0]);
             } else if (event.values[0] - prevWalkingCount > 1) {
                 // 센서가 다시 반응 했을 때 다시 반응할 동안의 누적값을 쌓아준다.
-                Log.v("Pedometer.java:", "센서 반응");
+                Log.v("PedometerService.java:", "센서 반응");
                 editor.putInt("step", walkingCount + ((int) event.values[0] - prevWalkingCount));
             } else if (event.values[0] > prevWalkingCount) {
                 // 센서가 활성화 되었을 때 1씩 증가
-                Log.v("Pedometer.java:", "카운트 증가");
+                Log.v("PedometerService.java:", "카운트 증가");
                 editor.putInt("step", ++walkingCount);
             }
 
@@ -73,7 +71,6 @@ public class PedometerService extends Service implements SensorEventListener {
 
             // Activity에 갱신 요청
             pedometerIntent.setAction("pedometer");
-            pedometerIntent.putExtra("step", preferences.getInt("step", 0));
             sendBroadcast(pedometerIntent);
         }
     }
@@ -98,10 +95,9 @@ public class PedometerService extends Service implements SensorEventListener {
             notificationManager.createNotificationChannel(channel);
         }
 
-
         // notification을 눌렀을 때 띄울 Activity
-        Intent notificationIntent = new Intent(this, Pedometer.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // notification 선언
         builder = new NotificationCompat.Builder(this, "test_notification")
