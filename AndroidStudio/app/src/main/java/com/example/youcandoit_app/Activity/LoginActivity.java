@@ -1,10 +1,11 @@
-package com.example.youcandoit_app;
+package com.example.youcandoit_app.Activity;
 
-
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.concurrent.ExecutionException;
+import com.example.youcandoit_app.Task.LoginTask;
+import com.example.youcandoit_app.R;
+import com.example.youcandoit_app.support.PermissionSupport;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private PermissionSupport permission;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     LoginTask task;
@@ -22,10 +27,16 @@ public class LoginActivity extends AppCompatActivity {
     EditText id ,pw;
     Button loginBtn;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 퍼미션 체크
+        permission = new PermissionSupport(this, this);
+        if(permission.checkPermission()) {
+            permission.requestPermission();
+        }
 
         preferences = getSharedPreferences("login", MODE_PRIVATE);
         mem_id = preferences.getString("id", null);
@@ -87,10 +98,5 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
     }
 }

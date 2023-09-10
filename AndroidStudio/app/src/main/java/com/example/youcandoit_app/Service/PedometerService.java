@@ -1,4 +1,4 @@
-package com.example.youcandoit_app;
+package com.example.youcandoit_app.Service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +16,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.youcandoit_app.Activity.MainActivity;
+import com.example.youcandoit_app.R;
 
 public class PedometerService extends Service implements SensorEventListener {
 

@@ -1,18 +1,18 @@
-package com.example.youcandoit_app;
+package com.example.youcandoit_app.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Build;
@@ -21,24 +21,38 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.youcandoit_app.Adapter.DiyCertifyAdapter;
+import com.example.youcandoit_app.Service.PedometerService;
+import com.example.youcandoit_app.Task.DiyCertifyGroupTask;
+import com.example.youcandoit_app.Task.PedometerTask;
+import com.example.youcandoit_app.R;
+import com.example.youcandoit_app.dto.GroupDto;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Intent i;
     String id;
-    String nickname;
     TextView text;
+    RecyclerView recyclerView;
+    Button btn;
+    View.OnClickListener cl;
 
-    public boolean isFirst = true; // 오늘 pedometer SQLite DB에 insert를 최초로 했는지.
-
+    // 만보기 사용을 위해 선언
     Sensor sensor_accelerometer;
     SensorManager sm;
-    SharedPreferences preferences;
+    SharedPreferences pedometer_preferences, user_preferences;
+
+    // 인증이 필요한 그룹 리스트
+    List<GroupDto> diyGroupList;
+
 
     // 현재 RTC
     SimpleDateFormat FormatRTC = new SimpleDateFormat("yyyy-MM-dd");
@@ -135,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,37 +160,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_page);
 
         tv_step = findViewById(R.id.tv_step);
-        text = (TextView) findViewById(R.id.text);
+        text = findViewById(R.id.text);
+        recyclerView = findViewById(R.id.diyCertifyList);
+        btn = findViewById(R.id.camera);
+        cl = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId() == R.id.camera) {
 
+                }
+            }
+
+        };
+        btn.setOnClickListener(cl);
+
+        user_preferences = getSharedPreferences("login", MODE_PRIVATE);
+        id = user_preferences.getString("id", null);
+        // 사용자 닉네임 보여주기.
+        text.setText(user_preferences.getString("nickname", null) + " 님");
+
+
+        // ==================================== 만보기 관련 ====================================
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor_accelerometer = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-        // 활동 퍼미션 체크
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
-        }
 
         // 디바이스에 걸음 센서의 존재 여부 체크
         if (sensor_accelerometer == null) {
             Toast.makeText(this, "No Step Sensor", Toast.LENGTH_SHORT).show();
         } else {
             // 센서가 있다면 Service 실행
-            Intent pedometerIntent = new Intent(this, PedometerService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(pedometerIntent);
+                startForegroundService(new Intent(this, PedometerService.class));
             }
         }
-
-        preferences = getSharedPreferences("pedometer", MODE_PRIVATE);
-
-        //사용자 닉네임 보여주기.
-        i = getIntent();
-        nickname = i.getStringExtra("nickname");
-        text.setText(nickname + " 님");
-
-        // 정각, 자정 전송
-        PedoUpThread pedoUpThread = new PedoUpThread();
-//        pedoUpThread.start();
 
         // Service에서 보내는 값을 받기 위한 선언
         BroadcastReceiver br = new MyBroadcastReceiver();
@@ -186,16 +200,73 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("pedometer");
         this.registerReceiver(br, filter);
 
-        tv_step.setText(preferences.getInt("step", 0) + "");
+        pedometer_preferences = getSharedPreferences("pedometer", MODE_PRIVATE);
+        tv_step.setText(pedometer_preferences.getInt("step", 0) + "");
+        // ===================================================================================
+
+
+        // ==================================== diy 인증 관련 ==================================
+        certifyGroup();
+        // 아이템을 가로로 배치하기 위해 LinearLayout 사용
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // 아이템 간격 설정
+        RecyclerViewDecoration decoration = new RecyclerViewDecoration(30);
+        recyclerView.addItemDecoration(decoration);
+
+        DiyCertifyAdapter diyCertifyAdapter = new DiyCertifyAdapter(diyGroupList);
+        // 커스텀 ClickListener 바디 구현
+        // 실제로는 recyclerView 영역을 클릭하면 어댑터에 구현해놓은 clickListener가 실행
+        // clickListener에서 포지션 값을 구해 다시 커스텀 ClickListener를 호출한다.
+        diyCertifyAdapter.setOnItemClickListener(new DiyCertifyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int groupNumber) {
+                Log.i("MainActivity.java", "그룹번호 받음 : " + groupNumber);
+                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+                i.putExtra("number", String.valueOf(groupNumber));
+                startActivityForResult(i, 100);
+            }
+        });
+        recyclerView.setAdapter(diyCertifyAdapter);
+        // ===================================================================================
+
+        // 정각, 자정 전송
+//        PedoUpThread pedoUpThread = new PedoUpThread();
+//        pedoUpThread.start();
+
     }
 
-    //만보기 결과 db 전송
+    /** DIY 인증을 완료했다면 */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == 100) {
+            // 액티비티 새로고침
+            Intent intent = getIntent();
+            finish(); 
+            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+            startActivity(intent); 
+            overridePendingTransition(0, 0); 
+        }
+    }
+
+    /** 인증이 필요한 그룹 불러오기 */
+    public void certifyGroup() {
+        try {
+            DiyCertifyGroupTask task = new DiyCertifyGroupTask();
+            diyGroupList = task.execute(id).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** 만보기 결과 db 전송 */
     public void pedoSend(String date) {
         try {
             Log.i("MainActivity.java:", "pedoSend() : 진입");
-            id = i.getStringExtra("id");
             PedometerTask task = new PedometerTask(); //DBsendActivity.java 객체 생성.
-            task.execute(date, id, String.valueOf(preferences.getInt("step", 0))); //DBsendActivity.java로 날짜, 아이디, 만보기 결과값 전송.
+            task.execute(date, id, String.valueOf(pedometer_preferences.getInt("step", 0))); //DBsendActivity.java로 날짜, 아이디, 만보기 결과값 전송.
             Log.i("MainActivity.java:", "pedoSend() : 만보기결과값 서버 DB로 전송됨.");
             Toast.makeText(MainActivity.this, "만보기 값이 서버 DB로 전송되었습니다.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -227,8 +298,25 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             // 보낸 액션이 pedometer라면
             if(intent.getAction() == "pedometer") {
-                tv_step.setText(preferences.getInt("step", 0) + "");
+                tv_step.setText(pedometer_preferences.getInt("step", 0) + "");
             }
+        }
+    }
+
+    /** RecyclerView 간격 조절 클래스 */
+    public class RecyclerViewDecoration extends RecyclerView.ItemDecoration {
+        private final int divWidth;
+
+        public RecyclerViewDecoration(int divWidth)
+        {
+            this.divWidth = divWidth;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
+        {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.right = divWidth;
         }
     }
 }

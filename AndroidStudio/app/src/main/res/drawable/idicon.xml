@@ -3,6 +3,6 @@
     <item
         android:width="10dp"
         android:height="10dp"
-        android:drawable="@drawable/idiconpng" />
+        android:drawable="@drawable/_id_icon_image" />
 
 </layer-list>
