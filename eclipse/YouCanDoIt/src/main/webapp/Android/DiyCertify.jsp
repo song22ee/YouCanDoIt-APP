@@ -23,8 +23,8 @@ try {
 		String backupPath = "/home/yun/ycdi/backup/certifyImage/"; // 백업본 저장 경로
 		String dbName = "/certifyImage/" + fileName; //db 저장 이름
 		
-		imagePart.write(path + fileName); // 파일 저장
-		imagePart.write(backupPath + fileName); // 백업본 저장
+		// imagePart.write(path + fileName); // 파일 저장
+		// imagePart.write(backupPath + fileName); // 백업본 저장
 		
 		DiyCertifyDto dto = new DiyCertifyDto(Integer.parseInt(number), id, dbName);
 		

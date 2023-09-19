@@ -27,8 +27,8 @@
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/border"
-        android:drawableLeft="@drawable/idicon"
+        android:background="@drawable/login_border_input"
+        android:drawableLeft="@drawable/login_id_icon"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="아이디"
@@ -48,8 +48,8 @@
         android:id="@+id/pw"
         android:layout_width="320dp"
         android:layout_height="50dp"
-        android:background="@drawable/border"
-        android:drawableLeft="@drawable/pwicon"
+        android:background="@drawable/login_border_input"
+        android:drawableLeft="@drawable/login_pw_icon"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="비밀번호"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/id"
         app:layout_constraintVertical_bias="0.041" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/loginBtn"
         android:layout_width="320dp"
         android:layout_height="50dp"

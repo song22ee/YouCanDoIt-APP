@@ -68,7 +68,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.camera);
+        setContentView(R.layout.camera_page);
 
         pLayout = findViewById(R.id.previewLayout);
         cLayout = findViewById(R.id.captureLayout);

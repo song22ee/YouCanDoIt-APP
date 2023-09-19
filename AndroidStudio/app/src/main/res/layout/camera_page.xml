@@ -13,7 +13,7 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="10dp"
         android:layout_gravity="top|start"
-        app:srcCompat="@drawable/close" />
+        app:srcCompat="@drawable/camera_close" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/previewLayout"

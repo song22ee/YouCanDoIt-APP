@@ -55,7 +55,7 @@ public class DiyCertifyAdapter extends RecyclerView.Adapter<DiyCertifyAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.diy_certify_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.diy_certify_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
         // RecycleView 영역을 클릭하게 되면 제일 먼저 이 메서드가 호출된다.

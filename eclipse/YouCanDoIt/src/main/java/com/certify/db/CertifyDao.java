@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import com.ConnectDB;
 
 public class CertifyDao {
-ConnectDB connectDB = new ConnectDB();
+	ConnectDB connectDB = new ConnectDB();
 	
 	public ArrayList<GroupDto> certifyGroupSelect(String id) {
 		ArrayList<GroupDto> dtoList = new ArrayList<>();
