@@ -31,6 +31,8 @@ public class DiyCertifyGroupTask extends AsyncTask<String, Void, List<GroupDto>>
     @Override
     protected List<GroupDto> doInBackground(String... strings) {
         try {
+            Log.i("DiyCertifyGroupTask", "인증할 DIY 그룹 조회 실행");
+
             String str;
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
 //            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/DiyGroupSelect.jsp");

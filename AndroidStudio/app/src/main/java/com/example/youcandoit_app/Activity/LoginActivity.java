@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.youcandoit_app.Task.LoginTask;
 import com.example.youcandoit_app.R;
+import com.example.youcandoit_app.Task.TokenTask;
 import com.example.youcandoit_app.support.PermissionSupport;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         preferences = getSharedPreferences("login", MODE_PRIVATE);
         mem_id = preferences.getString("id", null);
         password = preferences.getString("pw", null);
+        editor = preferences.edit();
 
         if(mem_id != null && password != null) {
             Log.i("LoginActivity.java:", "자동로그인");
@@ -48,6 +50,12 @@ public class LoginActivity extends AppCompatActivity {
                 task = new LoginTask();
                 nickname = task.execute(mem_id, password).get();
                 if(nickname != "로그인 실패") {
+                    // 토큰이 없으면 토큰 서버로 전송
+                    if(!preferences.getBoolean("isToken", true)) {
+                        new TokenTask().execute(mem_id, preferences.getString("token", null));
+                        editor.putBoolean("isToken", true);
+                        editor.commit();
+                    }
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 }
@@ -62,9 +70,6 @@ public class LoginActivity extends AppCompatActivity {
         id = (EditText) findViewById(R.id.id);
         pw= (EditText) findViewById(R.id.pw);
         loginBtn = (Button) findViewById(R.id.loginBtn);
-
-
-        editor = preferences.edit();
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +91,11 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("id", mem_id);
                             editor.putString("pw", password);
                             editor.putString("nickname", nickname);
+                            // 토큰이 없으면 토큰 서버로 전송
+                            if(!preferences.getBoolean("isToken", true)) {
+                                new TokenTask().execute(mem_id, preferences.getString("token", null));
+                                editor.putBoolean("isToken", true);
+                            }
                             editor.commit();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();

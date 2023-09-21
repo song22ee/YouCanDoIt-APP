@@ -1,6 +1,5 @@
-package com.example.youcandoit_app.Task;
+package com.example.youcandoit_app.support;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -11,31 +10,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class PedometerTask extends AsyncTask<String, Void, String> {
-    String sendMsg, receiveMsg;
-
-    @Override
-    protected String doInBackground(String ...strings) {
+public class TaskSupport {
+    String str;
+    String receiveMsg = "";
+    public String httpConnection(URL url, String sendMsg) {
         try {
-            String str;
-            //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
-//            URL url = new URL("http://192.168.45.95:8080/YouCanDoIt/Android/PedoRankUpdate.jsp");
-            // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
-
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestMethod("POST");
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
 
-            //전송할 데이터. GET방식으로 작성
-            sendMsg = "pedometer_date=" + strings[0] +"&mem_id=" + strings[1] + "&pedometer_result=" + strings[2];
-
             osw.write(sendMsg);
             osw.flush();
             //logcat에 찍어볼 수 있음.
             Log.i("sendMsg : " , sendMsg);
-
 
             //jsp와 통신 성공 시 수행
             if (conn.getResponseCode() == conn.HTTP_OK) {
@@ -48,14 +36,12 @@ public class PedometerTask extends AsyncTask<String, Void, String> {
                     buffer.append(str);
                 }
                 receiveMsg = buffer.toString();
-                Log.i("receiveMsg : ",receiveMsg);
+                Log.i("receiveMsg : ", "" + receiveMsg);
 
             } else {
                 //통신 실패
                 Log.i("통신실패!!!!","통신실패!!!");
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,5 +49,4 @@ public class PedometerTask extends AsyncTask<String, Void, String> {
         //jsp로부터 받은 리턴 값
         return receiveMsg;
     }
-
 }

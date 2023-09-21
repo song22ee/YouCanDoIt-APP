@@ -18,6 +18,8 @@ public class CertifyTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         try {
+            Log.i("CertifyTask", "DIY 인증사진 전송 실행");
+
             String str;
 
             String[] dataName = {"id", "groupNumber", "certifyImage"}; // 보낼 데이터명

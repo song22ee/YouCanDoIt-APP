@@ -40,4 +40,15 @@ public class MemberDao {
 			return dto;
 	}
 	
+	public void tokenUpdate(String id, String token) {
+		try(
+				Connection conn = connectDB.getConnection();
+				Statement stmt = conn.createStatement();
+			){
+				stmt.executeUpdate(String.format("update member set mobile_token='%s' where mem_id='%s'", token, id));
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+	}
+	
 }

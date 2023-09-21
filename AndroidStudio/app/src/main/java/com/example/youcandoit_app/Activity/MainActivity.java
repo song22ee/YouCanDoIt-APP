@@ -24,7 +24,6 @@ import com.example.youcandoit_app.Service.PedometerService;
 import com.example.youcandoit_app.support.onBackPressedSupport;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    
     @Override
     public void onBackPressed() {
         // fragment 종료 코드. 실행중인 호스트 프래그먼트들을 불러온다.

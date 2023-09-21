@@ -62,7 +62,7 @@ public class PedoRankDao {
 		 		Connection conn = connectDB.getConnection();
 				Statement stmt = conn.createStatement();
 			){
-				System.out.println(String.format("update pedometer_ranking set pedometer_result = '%d'"
+				System.out.println(String.format("update pedometer_ranking set pedometer_result = '%d' "
 		 				+ "where pedometer_date = '%tF' and mem_id='%s'" , 
 		 				dto.getPedometer_result(),dto.getPedometer_date(),dto.getMem_id()));
 				

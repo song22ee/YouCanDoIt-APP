@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024713496232",
+    "project_id": "ycdi-b3053",
+    "storage_bucket": "ycdi-b3053.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024713496232:android:18e687d60008fcbdc2549d",
+        "android_client_info": {
+          "package_name": "com.example.youcandoit_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0MJPotGcK4SW-qGNG_QW9ftW2Bm3QVx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
