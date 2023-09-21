@@ -4,8 +4,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,7 +19,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.youcandoit_app.Activity.MainActivity;
+import com.example.youcandoit_app.Activity.LoginActivity;
 import com.example.youcandoit_app.R;
 
 public class PedometerService extends Service implements SensorEventListener {
@@ -93,17 +95,17 @@ public class PedometerService extends Service implements SensorEventListener {
 
         // 안드로이드 8.0 이상 버전에서 알림을 사용하기 위한 채널 설정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("test_notification", "테스트 알림", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("ycdi_notification", "유캔두잇 알림", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
         // notification을 눌렀을 때 띄울 Activity
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // notification 선언
-        builder = new NotificationCompat.Builder(this, "test_notification")
+        builder = new NotificationCompat.Builder(this, "ycdi_notification")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("유캔두잇")
                 .setContentText(preferences.getInt("step", 0) + "")
@@ -119,6 +121,11 @@ public class PedometerService extends Service implements SensorEventListener {
             sm.registerListener(this, sensor_accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
         }
 
+        BroadcastReceiver br = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("isLast");
+        registerReceiver(br, filter);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -126,5 +133,22 @@ public class PedometerService extends Service implements SensorEventListener {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /** 자정 초기화를 위해 Broadcase 선언 */
+    public class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 보낸 액션이 pedometer라면
+            if(intent.getAction() == "isLast") {
+                // notification 갱신
+                builder.setContentText(preferences.getInt("step", 0) + "");
+                startForeground(1, builder.build());
+
+                // Activity에 갱신 요청
+                pedometerIntent.setAction("pedometer");
+                sendBroadcast(pedometerIntent);
+            }
+        }
     }
 }
