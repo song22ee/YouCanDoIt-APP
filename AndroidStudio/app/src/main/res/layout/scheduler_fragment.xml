@@ -3,18 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Fragment.SchedulerFragment">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="스케줄러 프래그먼트"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:id="@+id/tabs_border_layout"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/scheduler_tab_border"
+        android:clipToOutline="true"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:tabBackground="@drawable/scheduler_tab_background"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextAppearance="@style/schedulerSelectedTabText"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextAppearance="@style/schedulerTabText"
+            app:tabTextColor="#878787" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:background="@drawable/scheduler_recycler_view_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs_border_layout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/todayScheduleList"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,11 @@
-package com.member.db;
-import com.ConnectDB;
+package com.ycdi.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-
+import com.ConnectDB;
+import com.ycdi.dto.*;
 
 public class MemberDao {
 	ConnectDB connectDB = new ConnectDB();

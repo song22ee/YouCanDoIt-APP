@@ -1,4 +1,4 @@
-package com.pedometer.db;
+package com.ycdi.dto;
 
 import java.util.Date;
 

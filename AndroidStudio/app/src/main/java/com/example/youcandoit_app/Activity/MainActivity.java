@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         tabFt.show(scheduler_fragment);
                         tabFt.hide(main_fragment).commit();
                         break;
-                    case 2:
-                        break;
+//                    case 2:
+//                        break;
                 }
             }
 

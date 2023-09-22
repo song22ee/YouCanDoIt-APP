@@ -1,4 +1,4 @@
-package com.certify.db;
+package com.ycdi.dto;
 
 public class GroupDto {
 	// 간단하게 필요한 필드만 선언

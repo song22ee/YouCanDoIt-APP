@@ -1,9 +1,10 @@
-package com.pedometer.db;
+package com.ycdi.dao;
 
 import java.sql.Connection;
 import java.sql.Statement;
 
 import com.ConnectDB;
+import com.ycdi.dto.*;
 
 public class PedometerDao {
 	ConnectDB connectDB = new ConnectDB();

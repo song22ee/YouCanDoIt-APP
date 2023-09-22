@@ -1,10 +1,12 @@
-package com.pedoRank.db;
-import com.ConnectDB;
+package com.ycdi.dao;
 
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import com.ConnectDB;
+import com.ycdi.dto.*;
 
 public class PedoRankDao {
 	ConnectDB connectDB = new ConnectDB();

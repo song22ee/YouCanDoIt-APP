@@ -1,4 +1,4 @@
-package com.certify.db;
+package com.ycdi.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.ConnectDB;
+import com.ycdi.dto.*;
 
 public class CertifyDao {
 	ConnectDB connectDB = new ConnectDB();

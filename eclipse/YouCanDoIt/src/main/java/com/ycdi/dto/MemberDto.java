@@ -1,4 +1,4 @@
-package com.member.db;
+package com.ycdi.dto;
 
 import java.sql.Date;
 

@@ -1,4 +1,4 @@
-package com.certify.db;
+package com.ycdi.dto;
 
 import java.sql.Date;
 

@@ -1,4 +1,4 @@
-package com.goal.db;
+package com.ycdi.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
