@@ -87,6 +87,8 @@ public class PedometerService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.i("pedometerService", "만보기 백그라운드 실행");
+
         pedometerIntent = new Intent();
 
         // SharedPreferences : 단순한 데이터를 저장(키-값). 앱을 종료해도 유지
@@ -95,7 +97,7 @@ public class PedometerService extends Service implements SensorEventListener {
 
         // 안드로이드 8.0 이상 버전에서 알림을 사용하기 위한 채널 설정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("ycdi_notification", "유캔두잇 알림", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("pedometer_notification", "만보기 알림", NotificationManager.IMPORTANCE_LOW);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
@@ -105,10 +107,11 @@ public class PedometerService extends Service implements SensorEventListener {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // notification 선언
-        builder = new NotificationCompat.Builder(this, "ycdi_notification")
+        builder = new NotificationCompat.Builder(this, "pedometer_notification")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("유캔두잇")
+                .setContentTitle("만보기")
                 .setContentText(preferences.getInt("step", 0) + "")
+                .setShowWhen(false)
                 .setContentIntent(pendingIntent);
 
         // notification Foreground로 실행

@@ -1,11 +1,20 @@
 package com.example.youcandoit_app.Service;
 
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.example.youcandoit_app.Activity.LoginActivity;
+import com.example.youcandoit_app.R;
 import com.example.youcandoit_app.support.TaskSupport;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,17 +55,19 @@ public class FbMessageService extends FirebaseMessagingService {
         user_editor.commit();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         user_preferences = getSharedPreferences("login", MODE_PRIVATE);
         pedometer_preferences = getSharedPreferences("pedometer", MODE_PRIVATE);
+        user_editor = user_preferences.edit();
         pedometer_editor = pedometer_preferences.edit();
 
         Map data = message.getData();
-        String msg = data.get("title").toString();
+        String title = data.get("title").toString();
 
-        if(msg.equals("pedometerUpdate")) {
-            Log.i("FCM", "만보기 값을 서버로 전송합니다. " + msg);
+        if(title.equals("pedometerUpdate")) {
+            Log.i("FCM", "만보기 값을 서버로 전송합니다. " + title);
 
             pedometer_preferences = getSharedPreferences("pedometer", MODE_PRIVATE);
 
@@ -92,8 +103,48 @@ public class FbMessageService extends FirebaseMessagingService {
                 e.printStackTrace();
             }
         } else {
-            Log.i("FCM", "개인 호출 " + msg);
-            // 리마인더 코드
+            String content = data.get("content").toString();
+
+            Log.i("FCM", "알림 수신 : " + title);
+            Log.i("FCM", "알림 내용 : " + content);
+
+            // 안드로이드 8.0 이상 버전에서 알림을 사용하기 위한 채널 설정
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("ycdi_notification", "유캔두잇 알림", NotificationManager.IMPORTANCE_HIGH);
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            // notification을 눌렀을 때 띄울 Activity
+            Intent notificationIntent = new Intent(this, LoginActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
+            // notification 그룹 선언
+            String group = "reminder";
+            NotificationCompat.Builder groupNotification = new NotificationCompat.Builder(this, "ycdi_notification")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setGroup(group)
+                    .setGroupSummary(true);
+
+            // notification 선언
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ycdi_notification")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setGroup(group)
+                    .setContentIntent(pendingIntent);
+
+            // notification id 가져오기
+            int notifyId = user_preferences.getInt("notifyId", 3);
+
+            // notification 생성
+            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+            manager.notify(notifyId, builder.build());
+            manager.notify(2, groupNotification.build());
+
+            // notification id 증가
+            user_editor.putInt("notifyId", ++notifyId);
+            user_editor.commit();
         }
 
 

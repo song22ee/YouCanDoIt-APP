@@ -21,6 +21,9 @@
     <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- 알림 권한 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <!-- 외부저장소 파일 읽기,쓰기 권한 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -56,6 +59,10 @@
         <activity
             android:name=".Activity.CameraActivity"
             android:theme="@style/Transparent"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Activity.ReminderActivity"
             android:exported="true">
         </activity>
 

@@ -3,6 +3,8 @@ package com.example.youcandoit_app.Task;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.youcandoit_app.support.TaskSupport;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,6 +29,7 @@ public class LoginTask extends AsyncTask<String, Void, String> {
             //전송할 데이터. GET방식으로 작성
             sendMsg = "id=" + strings[0] + "&pw=" + strings[1];
 
+            receiveMsg = new TaskSupport().httpConnection(url, sendMsg);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             Log.i("LoginTask.java", e.getMessage());

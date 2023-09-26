@@ -18,12 +18,14 @@ import com.ycdi.dao.GodlifeGoalDao;
 import com.ycdi.dao.MemberDao;
 import com.ycdi.dao.PedoRankDao;
 import com.ycdi.dao.PedometerDao;
+import com.ycdi.dao.ReminderDao;
 import com.ycdi.dao.ScheduleDao;
 import com.ycdi.dto.DiyCertifyDto;
 import com.ycdi.dto.GroupDto;
 import com.ycdi.dto.MemberDto;
 import com.ycdi.dto.PedoRankDto;
 import com.ycdi.dto.PedometerDto;
+import com.ycdi.dto.ReminderDto;
 import com.ycdi.dto.ScheduleDto;
 
 public class Service {
@@ -131,8 +133,8 @@ public class Service {
 				String backupPath = "/home/yun/ycdi/backup/certifyImage/"; // 백업본 저장 경로
 				String dbName = "/certifyImage/" + fileName; //db 저장 이름
 				
-				 imagePart.write(path + fileName); // 파일 저장
-				 imagePart.write(backupPath + fileName); // 백업본 저장
+				imagePart.write(path + fileName); // 파일 저장
+				imagePart.write(backupPath + fileName); // 백업본 저장
 				
 				DiyCertifyDto dto = new DiyCertifyDto(Integer.parseInt(number), id, dbName);
 				
@@ -173,5 +175,20 @@ public class Service {
 		
 		System.out.println("일정 업데이트 완료.");
 		return "scheduleChecked : 성공";
+	}
+	
+	/** 리마인더 조회 */
+	@SuppressWarnings("unchecked")
+	public JSONArray reminderSelect(String id) {
+		ArrayList<ReminderDto> dtoList = new ReminderDao().reminderSelect(id);
+		
+		JSONArray jArray = new JSONArray();
+		for(ReminderDto dto : dtoList) {
+			jArray.add(dto.getReminder_contents());
+		}
+		
+		System.out.println("리마인더 조회 완료.");
+		System.out.println(jArray);
+		return jArray;
 	}
 }

@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/pedometerTitle"
         app:layout_constraintStart_toStartOf="@+id/goal_layout"
         app:layout_constraintTop_toTopOf="@+id/pedometerTitle"
-        app:srcCompat="@drawable/goal_back_icon" />
+        app:srcCompat="@drawable/global_back_icon" />
 
     <TextView
         android:id="@+id/pedometerTitle"

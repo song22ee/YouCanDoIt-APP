@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.MainActivity">
+    tools:context=".Activity.ReminderActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,20 +23,12 @@
         app:title="유캔두잇"
         app:titleTextColor="@color/black">
 
-        <ImageButton
-            android:id="@+id/reminder_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:layout_marginRight="30dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/main_reminder_icon"/>
-
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginRight="30dp"
             android:gravity="center"
             android:text="OOO 님"
             android:textColor="@color/black" />
@@ -44,31 +36,40 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@drawable/tab_under_line">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="리마인더"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabBackground="@drawable/tab_under_line"
-            app:tabIndicatorColor="@color/black"
-            app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextAppearance="@style/tabTextBold"
-            app:tabSelectedTextColor="@color/black"
-            app:tabTextColor="#828282" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/textView6"
+            app:srcCompat="@drawable/global_back_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <FrameLayout
-        android:id="@+id/tabContent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reminderList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
 </LinearLayout>

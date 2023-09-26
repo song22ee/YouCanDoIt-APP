@@ -35,8 +35,6 @@
         android:inputType="textPersonName"
         android:textColor="#8C8C8C"
         android:textSize="12sp"
-
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -56,8 +54,6 @@
         android:inputType="textPassword"
         android:textColor="#8C8C8C"
         android:textSize="12sp"
-
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -69,7 +65,7 @@
         android:id="@+id/loginBtn"
         android:layout_width="320dp"
         android:layout_height="50dp"
-        android:background="@color/subColor"
+        android:background="@drawable/login_button"
         android:text="로그인"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

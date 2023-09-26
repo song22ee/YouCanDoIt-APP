@@ -47,7 +47,7 @@ public class MainFragment extends Fragment {
     ConstraintLayout goal_layout;
     Button goal_btn;
     View.OnClickListener cl;
-    Fragment goal_fragment;
+    Fragment goal_fragment, set_fragment;
 
     SharedPreferences pedometer_preferences, user_preferences;
 
@@ -77,16 +77,20 @@ public class MainFragment extends Fragment {
         id = user_preferences.getString("id", null);
 
         goal_fragment = new GoalFragment();
+        set_fragment = new GoalSetFragment();
 
         cl = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view.getId() == R.id.goal_layout) {
                     getChildFragmentManager().beginTransaction().replace(R.id.main_fragment_layout, goal_fragment).commit();
+                } else if(view.getId() == R.id.goal_button) {
+                    getChildFragmentManager().beginTransaction().replace(R.id.main_fragment_layout, set_fragment).commit();
                 }
             }
         };
         goal_layout.setOnClickListener(cl);
+        goal_btn.setOnClickListener(cl);
 
         // 메인페이지에서 필요한 데이터 받아오기
         getServerData();

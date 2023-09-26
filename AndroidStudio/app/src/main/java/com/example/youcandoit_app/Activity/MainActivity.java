@@ -9,6 +9,8 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabs;
     Fragment main_fragment, scheduler_fragment;
     FragmentManager fm;
+    ImageButton reminder_button;
+    View.OnClickListener cl;
 
     Sensor sensor_accelerometer;
     SensorManager sm;
@@ -62,11 +66,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         nickname = findViewById(R.id.text);
+        reminder_button = findViewById(R.id.reminder_button);
         tabs = findViewById(R.id.tabs);
 
         // 사용자 닉네임 보여주기.
         user_preferences = getSharedPreferences("login", MODE_PRIVATE);
         nickname.setText(user_preferences.getString("nickname", null) + " 님");
+
+        cl = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ReminderActivity.class));
+                overridePendingTransition(0, 0);
+            }
+        };
+        reminder_button.setOnClickListener(cl);
 
         // 탭 추가
         tabs.addTab(tabs.newTab().setText("챌린지"));

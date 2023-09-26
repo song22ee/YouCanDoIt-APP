@@ -38,9 +38,11 @@ public class Controller extends HttpServlet {
 		case "/login":
 			result = service.login(request.getParameter("id"), request.getParameter("pw"));
 			break;
+			
 		case "/newToken":
 			result = service.newToken(request.getParameter("id"), request.getParameter("token"));
 			break;
+			
 		case "/pedometerUpdate":
 			String dateStr = request.getParameter("date");
 			String id = request.getParameter("id");
@@ -48,23 +50,35 @@ public class Controller extends HttpServlet {
 			String isLast = request.getParameter("last");
 			result = service.pedometerUpdate(dateStr, id, pedometer, isLast);
 			break;
+			
 		case "/pedometerGoalSelect":
 			result = service.pedometerGoalSelect(request.getParameter("id"));
 			break;
+			
 		case "/pedometerGoalUpdate":
 			result = service.pedometerGoalUpdate(request.getParameter("id"), Integer.parseInt(request.getParameter("goal")));
 			break;
+			
 		case "/diyGroupSelect":
 			result = service.diyGroupSelect(request.getParameter("id"));
 			break;
+			
 		case "/diyCertify":
 			result = service.diyCertify(request.getPart("id"), request.getPart("groupNumber"), request.getPart("certifyImage"));
 			break;
+			
 		case "/todayScheduleSelect":
 			result = service.todayScheduleSelect(request.getParameter("id"));
 			break;
+			
 		case "/scheduleChecked":
 			result = service.scheduleChecked(Integer.parseInt(request.getParameter("schedule_number")));
+			break;
+			
+		case "/reminderSelect":
+			result = service.reminderSelect(request.getParameter("id"));
+			break;
+			
 		default:
 			result = "Invalid URL";
 		}

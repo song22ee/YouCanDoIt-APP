@@ -166,10 +166,12 @@ public class GoalSetFragment extends Fragment implements onBackPressedSupport {
             // 부모 프래그먼트를 구해서 새로고침
             Fragment parent = getParentFragment();
             Fragment gParent = parent.getParentFragment();
-            gParent.getFragmentManager().beginTransaction().detach(gParent).commit();
-            gParent.getFragmentManager().beginTransaction().attach(gParent).commit();
             parent.getFragmentManager().beginTransaction().detach(parent).commit();
             parent.getFragmentManager().beginTransaction().attach(parent).commit();
+            if(gParent != null) {
+                gParent.getFragmentManager().beginTransaction().detach(gParent).commit();
+                gParent.getFragmentManager().beginTransaction().attach(gParent).commit();
+            }
 
             onBackPressed();
         } catch (Exception e) {
