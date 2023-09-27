@@ -54,12 +54,19 @@ public class TodayScheduleAdapter extends RecyclerView.Adapter<TodayScheduleAdap
                 int position = viewHolder.getAdapterPosition();
                 if(position != RecyclerView.NO_POSITION) {
                     ScheduleDto dto = dtoList.get(position);
+                    ScheduleSuccessTask task = new ScheduleSuccessTask();
                     if(dto.getSchedule_success().equals("0")) {
-                        ScheduleSuccessTask task = new ScheduleSuccessTask();
-                        task.execute(String.valueOf(dto.getSchedule_number()));
+                        task.execute(String.valueOf(dto.getSchedule_number()), "1");
+                        dto.setSchedule_success("1");
 
                         viewHolder.checkBox.setChecked(true);
                         viewHolder.highlighter.setVisibility(View.VISIBLE);
+                    } else {
+                        task.execute(String.valueOf(dto.getSchedule_number()), "0");
+                        dto.setSchedule_success("0");
+
+                        viewHolder.checkBox.setChecked(false);
+                        viewHolder.highlighter.setVisibility(View.INVISIBLE);
                     }
                 }
             }

@@ -17,12 +17,12 @@ public class ScheduleSuccessTask extends AsyncTask<String, Void, String> {
             Log.i("ScheduleSuccessTask", "일정 업데이트(완료) 실행");
 
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-//            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/scheduleChecked");
-            URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/scheduleChecked");
+            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/scheduleChecked");
+//            URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/scheduleChecked");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             //전송할 데이터. GET방식으로 작성
-            sendMsg = "schedule_number=" + strings[0];
+            sendMsg = "schedule_number=" + strings[0] + "&success=" + strings[1];
 
             receiveMsg = new TaskSupport().httpConnection(url, sendMsg);
         } catch (MalformedURLException e) {

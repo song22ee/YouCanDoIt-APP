@@ -72,7 +72,7 @@ public class Controller extends HttpServlet {
 			break;
 			
 		case "/scheduleChecked":
-			result = service.scheduleChecked(Integer.parseInt(request.getParameter("schedule_number")));
+			result = service.scheduleChecked(Integer.parseInt(request.getParameter("schedule_number")), request.getParameter("success"));
 			break;
 			
 		case "/reminderSelect":

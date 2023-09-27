@@ -39,13 +39,13 @@ ConnectDB connectDB = new ConnectDB();
 		return dtoList;
 	}
 	
-	public void scheduleUpdate(int schedule_number) {
+	public void scheduleUpdate(int schedule_number, String success) {
 		try(
 			Connection conn = connectDB.getConnection();
 			Statement stmt = conn.createStatement();
 		){
 			stmt.executeUpdate(String.format("update schedule set schedule_success='%s' where schedule_number=%d", 
-					"1", schedule_number));
+					success, schedule_number));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -169,9 +169,9 @@ public class Service {
 		return jArray;
 	}
 	
-	/** 일정 완료 */
-	public String scheduleChecked(int number) {
-		new ScheduleDao().scheduleUpdate(number);
+	/** 일정 체크 or 해제 */
+	public String scheduleChecked(int number, String success) {
+		new ScheduleDao().scheduleUpdate(number, success);
 		
 		System.out.println("일정 업데이트 완료.");
 		return "scheduleChecked : 성공";

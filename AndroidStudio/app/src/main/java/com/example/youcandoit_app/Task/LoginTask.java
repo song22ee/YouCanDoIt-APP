@@ -22,8 +22,8 @@ public class LoginTask extends AsyncTask<String, Void, String> {
             Log.i("LoginTask", "로그인 실행");
 
             //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-//            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/login");
-            URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/login");
+            URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/login");
+//            URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/login");
             // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
             //전송할 데이터. GET방식으로 작성
