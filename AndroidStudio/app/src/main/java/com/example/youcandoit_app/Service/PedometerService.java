@@ -132,6 +132,8 @@ public class PedometerService extends Service implements SensorEventListener {
         return super.onStartCommand(intent, flags, startId);
     }
 
+
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
