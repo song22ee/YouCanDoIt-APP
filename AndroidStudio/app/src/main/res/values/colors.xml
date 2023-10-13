@@ -2,6 +2,7 @@
 <resources>
     <color name="mainColor">#F8BA00</color>
     <color name="subColor">#FFF066</color>
+    <color name="subColor2">#FFF6A7</color>
     <color name="borderColor">#B1B1B1</color>
 
     <color name="purple_200">#FFBB86FC</color>

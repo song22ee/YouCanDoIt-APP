@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/group_image"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.004"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.003" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:text="인증을 해주세요."
+        android:textColor="#aa000000"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/group_image"
+        app:layout_constraintEnd_toEndOf="@id/group_image"
+        app:layout_constraintStart_toStartOf="@id/group_image"
+        app:layout_constraintTop_toTopOf="@id/group_image" />
+
+    <TextView
+        android:id="@+id/group_subject"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:gravity="fill_vertical"
+        android:text="챌린지 제목"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_image"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/group_name"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/main_rounded_group_name"
+        android:gravity="center"
+        android:text="그룹명"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/group_subject"
+        app:layout_constraintTop_toBottomOf="@+id/group_image"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

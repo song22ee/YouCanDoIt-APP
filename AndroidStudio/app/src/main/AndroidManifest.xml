@@ -10,9 +10,26 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
     <!-- 기기가 재부팅되어도 실행 가능하도록 -->
-<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- 앱이 종료되어도 포그라운드 작업 권한 허용 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 기기에 카메라가 있는지 확인 -->
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- 알림 권한 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- 외부저장소 파일 읽기,쓰기 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,8 +40,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YouCanDoItAPP"
         tools:targetApi="31">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +50,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".Pedometer"
+            android:name=".Activity.MainActivity"
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".Activity.CameraActivity"
+            android:theme="@style/Transparent"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".Activity.ReminderActivity"
+            android:exported="true">
+        </activity>
+
+        <service android:name=".Service.PedometerService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <service
+            android:name=".Service.FbMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        
+        <receiver
+            android:name=".support.RebootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
