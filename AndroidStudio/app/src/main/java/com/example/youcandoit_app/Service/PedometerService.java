@@ -98,6 +98,7 @@ public class PedometerService extends Service implements SensorEventListener {
         // 안드로이드 8.0 이상 버전에서 알림을 사용하기 위한 채널 설정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("pedometer_notification", "만보기 알림", NotificationManager.IMPORTANCE_LOW);
+            channel.setShowBadge(false); // 앱 아이콘에 뜨는 알림갯수에 포함하지 않음
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

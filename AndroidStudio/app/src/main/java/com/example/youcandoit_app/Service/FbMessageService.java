@@ -73,8 +73,8 @@ public class FbMessageService extends FirebaseMessagingService {
 
             try {
                 //접속할 서버 주소 (이클립스에서 android.jsp실행시 웹브라우저 주소)
-//                URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/pedometerUpdate");
-                URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/pedometerUpdate");
+                URL url = new URL("http://ycdi.cafe24.com:8080/YouCanDoIt/pedometerUpdate");
+//                URL url = new URL("http://192.168.45.94:8080/YouCanDoIt/pedometerUpdate");
                 // http://ip주소:포트번호/이클립스프로젝트명/WebContent아래폴더/androidDB.jsp
 
                 String date = data.get("date").toString();
