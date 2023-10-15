@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -128,7 +129,7 @@ public class Service {
 				
 				// 실제 저장 경로 /home/yun/ycdi/build/certifyImage/파일명
 				// db 저장 경로 /certifyImage/파일명
-				String fileName = number + "_" + id + "_" + imagePart.getSubmittedFileName(); // 파일명 지정
+				String fileName = number + "_" + id + "_" + LocalDate.now(); // 파일명 지정
 				String path = "/home/yun/ycdi/build/certifyImage/"; // 저장 경로
 				String backupPath = "/home/yun/ycdi/backup/certifyImage/"; // 백업본 저장 경로
 				String dbName = "/certifyImage/" + fileName; //db 저장 이름
