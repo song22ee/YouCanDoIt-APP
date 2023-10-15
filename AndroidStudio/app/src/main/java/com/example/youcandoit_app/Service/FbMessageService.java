@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -136,6 +138,12 @@ public class FbMessageService extends FirebaseMessagingService {
 
             // notification id 가져오기
             int notifyId = user_preferences.getInt("notifyId", 3);
+
+            // 화면 깨우기
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            @SuppressLint("InvalidWakeLockTag")
+            PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+            wakeLock.acquire(5000);
 
             // notification 생성
             NotificationManagerCompat manager = NotificationManagerCompat.from(this);
